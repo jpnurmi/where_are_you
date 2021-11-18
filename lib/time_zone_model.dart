@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'geo_location.dart';
 import 'geo_service.dart';
 
 class TimeZoneModel extends ChangeNotifier {
@@ -36,7 +37,7 @@ class TimeZoneModel extends ChangeNotifier {
     _lastName = name;
     _selectedLocation = null;
     return _service
-        .searchName(name, lang: lang, release: release)
+        .search(name, lang: lang, release: release)
         .then(_updateLocations);
   }
 }

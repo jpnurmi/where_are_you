@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'geo_location.dart';
 import 'geo_service.dart';
 import 'time_zone_model.dart';
 
@@ -51,13 +52,7 @@ class _TimeZonePageState extends State<TimeZonePage> {
         child: Center(
           child: Autocomplete<GeoLocation>(
             displayStringForOption: geoLocationToString,
-            optionsBuilder: (value) async {
-              await model.searchLocation(value.text);
-              final name = value.text.toLowerCase();
-              return model.locations.where((location) {
-                return location.name?.toLowerCase().contains(name) == true;
-              });
-            },
+            optionsBuilder: (value) => model.searchLocation(value.text),
             onSelected: (location) => model.selectLocation(location),
           ),
         ),
