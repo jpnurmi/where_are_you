@@ -6,7 +6,8 @@ import 'package:meta/meta.dart';
 import 'geo_data.dart';
 import 'geo_location.dart';
 
-const _kBaseUrl = 'http://geoname-lookup.ubuntu.com/';
+const _kGeoIPLookupUrl = 'https://geoip.ubuntu.com/lookup';
+const _kGeonameLookupUrl = 'http://geoname-lookup.ubuntu.com/';
 
 class GeoService {
   GeoService(this._geodata, {@visibleForTesting Dio? dio})
@@ -15,6 +16,8 @@ class GeoService {
   final Dio _dio;
   CancelToken? _token;
   final Geodata _geodata;
+
+  Future<GeoLocation?> init() => _lookupGeoIP();
 
   Future<Iterable<GeoLocation>> search(
     String name, {
@@ -47,7 +50,7 @@ class GeoService {
 
   Future<Response> _sendQuery(String query, String? release, String? lang) {
     return _dio.get(
-      _kBaseUrl,
+      _kGeonameLookupUrl,
       queryParameters: <String, String>{
         'query': query,
         if (release != null) 'release': release,
@@ -70,5 +73,13 @@ class GeoService {
   Future<Iterable<GeoLocation>> _onQueryResponse(Response response) async {
     final items = json.decode(response.data.toString()) as Iterable;
     return items.map((json) => GeoLocation.fromJson(json));
+  }
+
+  Future<GeoLocation?> _lookupGeoIP() async {
+    final response = await _dio.get(
+      _kGeoIPLookupUrl,
+      options: Options(responseType: ResponseType.plain),
+    );
+    return GeoLocation.fromXml(response.data.toString());
   }
 }

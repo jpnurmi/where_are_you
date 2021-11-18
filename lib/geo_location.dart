@@ -1,3 +1,5 @@
+import 'package:xml/xml.dart';
+
 class GeoLocation {
   GeoLocation({
     this.name,
@@ -49,6 +51,22 @@ class GeoLocation {
     );
   }
 
+  static GeoLocation? fromXml(String xml) {
+    try {
+      final element = XmlDocument.parse(xml).rootElement;
+      if (element.getTextOrNull('Status') != 'OK') return null;
+      return GeoLocation(
+        name: element.getTextOrNull('City'),
+        admin1: element.getTextOrNull('CountryRegionName'),
+        country: element.getTextOrNull('CountryName'),
+        latitude: element.getDoubleOrNull('Latitude'),
+        longitude: element.getDoubleOrNull('Longitude'),
+      );
+    } on XmlException {
+      return null;
+    }
+  }
+
   @override
   String toString() =>
       'GeoLocation(name: $name, admin1: $admin1, country: $country, latitude: $latitude, longitude: $longitude)';
@@ -74,4 +92,10 @@ class GeoLocation {
       longitude.hashCode,
     );
   }
+}
+
+extension _XmlElementX on XmlElement? {
+  String? getTextOrNull(String name) => this?.getElement(name)?.text;
+  double? getDoubleOrNull(String name) =>
+      double.tryParse(getTextOrNull(name) ?? '');
 }

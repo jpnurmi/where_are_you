@@ -77,11 +77,15 @@ class _WhereAreYouPageState extends State<WhereAreYouPage> {
       body: Padding(
         padding: const EdgeInsets.all(48.0),
         child: Center(
-          child: Autocomplete<GeoLocation>(
-            displayStringForOption: geoLocationToString,
-            optionsBuilder: (value) => model.searchLocation(value.text),
-            onSelected: (location) => model.selectLocation(location),
-          ),
+          child: model.isInitialized
+              ? Autocomplete<GeoLocation>(
+                  initialValue: TextEditingValue(
+                      text: geoLocationToString(model.selectedLocation)),
+                  displayStringForOption: geoLocationToString,
+                  optionsBuilder: (value) => model.searchLocation(value.text),
+                  onSelected: (location) => model.selectLocation(location),
+                )
+              : const CircularProgressIndicator(),
         ),
       ),
       floatingActionButton: Row(

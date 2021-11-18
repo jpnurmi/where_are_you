@@ -21,7 +21,15 @@ class WhereAreYouModel extends ChangeNotifier {
   GeoLocation? _selectedLocation;
   var _locations = const Iterable<GeoLocation>.empty();
 
-  Future<void> init() => _network.connect().then((_) => notifyListeners());
+  var _initialized = false;
+  bool get isInitialized => _initialized;
+
+  Future<void> init() async {
+    await _network.connect();
+    if (isOnline) _selectedLocation = await _geo.init();
+    _initialized = true;
+    notifyListeners();
+  }
 
   bool? _online;
   bool get isOnline => _online ?? _network.isOnline;
