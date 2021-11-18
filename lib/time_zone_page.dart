@@ -51,19 +51,8 @@ class _TimeZonePageState extends State<TimeZonePage> {
         child: Center(
           child: Autocomplete<GeoLocation>(
             displayStringForOption: geoLocationToString,
-            fieldViewBuilder: (context, controller, focusNode, onSubmitted) {
-              if (model.selectedLocation != null) {
-                controller.text = geoLocationToString(model.selectedLocation);
-              }
-              return TextFormField(
-                autofocus: true,
-                focusNode: focusNode,
-                controller: controller,
-                onFieldSubmitted: (value) => onSubmitted(),
-                onChanged: model.searchLocation,
-              );
-            },
-            optionsBuilder: (value) {
+            optionsBuilder: (value) async {
+              await model.searchLocation(value.text);
               final name = value.text.toLowerCase();
               return model.locations.where((location) {
                 return location.name?.toLowerCase().contains(name) == true;

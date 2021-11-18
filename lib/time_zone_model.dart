@@ -25,13 +25,14 @@ class TimeZoneModel extends ChangeNotifier {
   }
 
   Iterable<GeoLocation> get locations => _locations;
-  void _updateLocations(Iterable<GeoLocation> locations) {
+  Iterable<GeoLocation> _updateLocations(Iterable<GeoLocation> locations) {
     _locations = locations;
     notifyListeners();
+    return _locations;
   }
 
-  Future<void> searchLocation(String name) async {
-    if (_lastName == name) return;
+  Future<Iterable<GeoLocation>> searchLocation(String name) async {
+    if (_lastName == name) [];
     _lastName = name;
     _selectedLocation = null;
     return _service
