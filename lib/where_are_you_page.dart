@@ -56,18 +56,18 @@ class _WhereAreYouPageState extends State<WhereAreYouPage> {
 
     String geoLocationToString(GeoLocation? location) {
       if (location == null || location.name?.isEmptyOrNull == true) return '';
-      if (location.country.isEmptyOrNull && location.admin1.isEmptyOrNull) {
+      if (location.country.isEmptyOrNull && location.admin.isEmptyOrNull) {
         return lang.geoLocationCity(location.name!);
       }
-      if (location.admin1.isEmptyOrNull) {
+      if (location.admin.isEmptyOrNull) {
         return lang.geoLocationCityCountry(location.name!, location.country!);
       }
       if (location.country.isEmptyOrNull) {
-        return lang.geoLocationCityAdmin(location.name!, location.admin1!);
+        return lang.geoLocationCityAdmin(location.name!, location.admin!);
       }
       return lang.geoLocationCityAdminCountry(
         location.name!,
-        location.admin1!,
+        location.admin!,
         location.country!,
       );
     }

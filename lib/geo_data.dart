@@ -43,7 +43,7 @@ class Geodata {
 
   static bool _adminWhere(String name, GeoLocation city) {
     return _cityWhere(name, city) ||
-        city.admin1?.toLowerCase().startsWith(name) == true;
+        city.admin?.toLowerCase().startsWith(name) == true;
   }
 
   static bool _countryWhere(String name, GeoLocation city) {
@@ -59,14 +59,14 @@ class Geodata {
     for (final line in _splitGeodata(await _loadCities())) {
       final city = GeoLocation(
         name: line[1],
-        admin1: adminCodes[line[10]],
+        admin: adminCodes['${line[8]}.${line[9]}'],
         country: countryCodes[line[8]],
         country2: line[8],
         latitude: double.tryParse(line[4]),
         longitude: double.tryParse(line[5]),
       );
       _cities.insert(city.name, city);
-      _admins.insert(city.admin1, city);
+      _admins.insert(city.admin, city);
       _countries.insert(city.country, city);
     }
     _countries2 = countryCodes.reverse();
