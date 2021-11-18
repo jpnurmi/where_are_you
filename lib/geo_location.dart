@@ -7,6 +7,7 @@ class GeoLocation {
     this.country,
     this.latitude,
     this.longitude,
+    this.timezone,
   });
 
   final String? name;
@@ -14,6 +15,7 @@ class GeoLocation {
   final String? country;
   final double? latitude;
   final double? longitude;
+  final String? timezone;
 
   GeoLocation copyWith({
     String? name,
@@ -21,6 +23,7 @@ class GeoLocation {
     String? country,
     double? latitude,
     double? longitude,
+    String? timezone,
   }) {
     return GeoLocation(
       name: name ?? this.name,
@@ -28,6 +31,7 @@ class GeoLocation {
       country: country ?? this.country,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      timezone: timezone ?? this.timezone,
     );
   }
 
@@ -38,6 +42,7 @@ class GeoLocation {
       'country': country,
       'latitude': latitude,
       'longitude': longitude,
+      'timezone': timezone,
     };
   }
 
@@ -48,6 +53,7 @@ class GeoLocation {
       country: map['country'],
       latitude: double.tryParse(map['latitude']),
       longitude: double.tryParse(map['longitude']),
+      timezone: map['timezone'],
     );
   }
 
@@ -61,6 +67,7 @@ class GeoLocation {
         country: element.getTextOrNull('CountryName'),
         latitude: element.getDoubleOrNull('Latitude'),
         longitude: element.getDoubleOrNull('Longitude'),
+        timezone: element.getTextOrNull('TimeZone'),
       );
     } on XmlException {
       return null;
@@ -69,7 +76,7 @@ class GeoLocation {
 
   @override
   String toString() =>
-      'GeoLocation(name: $name, admin1: $admin1, country: $country, latitude: $latitude, longitude: $longitude)';
+      'GeoLocation(name: $name, admin1: $admin1, country: $country, latitude: $latitude, longitude: $longitude, timezone: $timezone)';
 
   @override
   bool operator ==(Object other) {
@@ -79,17 +86,19 @@ class GeoLocation {
         other.admin1 == admin1 &&
         other.country == country &&
         other.latitude == latitude &&
-        other.longitude == longitude;
+        other.longitude == longitude &&
+        other.timezone == timezone;
   }
 
   @override
   int get hashCode {
     return Object.hash(
-      name.hashCode,
-      admin1.hashCode,
-      country.hashCode,
-      latitude.hashCode,
-      longitude.hashCode,
+      name,
+      admin1,
+      country,
+      latitude,
+      longitude,
+      timezone,
     );
   }
 }
