@@ -48,6 +48,7 @@ class Geodata {
 
   static bool _countryWhere(String name, GeoLocation city) {
     return _cityWhere(name, city) ||
+        _adminWhere(name, city) ||
         city.country?.toLowerCase().startsWith(name) == true;
   }
 
@@ -75,13 +76,17 @@ class Geodata {
 
 extension _MapList<T> on Map<String, List<T>> {
   List<T> find(String key, bool Function(String, T) f) {
-    if (key.isEmpty) return [];
-    final l = key.toLowerCase();
-    final m = <T>[];
-    for (final v in this[l[0]] ?? []) {
-      if (f(l, v)) m.add(v);
+    final res = <T>[];
+    final keys = key
+        .toLowerCase()
+        .split(' ')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty);
+    final values = keys.expand<T>((word) => this[word[0]] ?? []);
+    for (final value in values) {
+      if (keys.every((key) => f(key, value))) res.add(value);
     }
-    return m;
+    return res;
   }
 
   void insert(String? key, T value) {

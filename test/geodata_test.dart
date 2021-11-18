@@ -50,6 +50,16 @@ void main() {
       expect(result.single.country, 'Finland');
       expect(result.single.country2, 'FI');
     });
+
+    await data.search('Hel uus FIN').then((result) {
+      expect(result.length, 1);
+      expect(result.single.name, 'Helsinki');
+      expect(result.single.admin, 'Uusimaa');
+      expect(result.single.country, 'Finland');
+      expect(result.single.country2, 'FI');
+    });
+
+    await data.search('Hel foo FIN').then((result) => expect(result, isEmpty));
   });
 
   test('country2', () async {
