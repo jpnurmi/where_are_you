@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'geo_location.dart';
 import 'geo_service.dart';
 
-class TimeZoneModel extends ChangeNotifier {
-  TimeZoneModel(GeoService service) : _service = service;
+class WhereAreYouModel extends ChangeNotifier {
+  WhereAreYouModel(GeoService service) : _service = service;
 
   final GeoService _service;
 

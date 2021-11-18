@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_time_zone_map")
-set(APPLICATION_ID "com.example.flutter_time_zone_map")
+set(BINARY_NAME "where_are_you")
+set(APPLICATION_ID "com.example.where_are_you")
 
 cmake_policy(SET CMP0063 NEW)
 

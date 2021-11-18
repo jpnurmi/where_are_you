@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'geo_data.dart';
 import 'geo_service.dart';
-import 'time_zone_page.dart';
+import 'where_are_you_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +17,6 @@ Future<void> main() async {
 
   runApp(Provider(
     create: (_) => GeoService(geodata),
-    child: const MaterialApp(home: Builder(builder: TimeZonePage.create)),
+    child: const MaterialApp(home: Builder(builder: WhereAreYouPage.create)),
   ));
 }

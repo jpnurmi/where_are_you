@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'geo_location.dart';
 import 'geo_service.dart';
-import 'time_zone_model.dart';
+import 'where_are_you_model.dart';
 
 class FakeLocalizations {
   String geoLocationFormat(String city, String country) => '$city ($country)';
@@ -11,22 +11,22 @@ class FakeLocalizations {
 
 final lang = FakeLocalizations();
 
-class TimeZonePage extends StatefulWidget {
-  const TimeZonePage({Key? key}) : super(key: key);
+class WhereAreYouPage extends StatefulWidget {
+  const WhereAreYouPage({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
     final service = Provider.of<GeoService>(context, listen: false);
     return ChangeNotifierProvider(
-      create: (_) => TimeZoneModel(service),
-      child: const TimeZonePage(),
+      create: (_) => WhereAreYouModel(service),
+      child: const WhereAreYouPage(),
     );
   }
 
   @override
-  State<TimeZonePage> createState() => _TimeZonePageState();
+  State<WhereAreYouPage> createState() => _WhereAreYouPageState();
 }
 
-class _TimeZonePageState extends State<TimeZonePage> {
+class _WhereAreYouPageState extends State<WhereAreYouPage> {
   final _controller = TextEditingController();
 
   @override
@@ -37,7 +37,7 @@ class _TimeZonePageState extends State<TimeZonePage> {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<TimeZoneModel>(context);
+    final model = Provider.of<WhereAreYouModel>(context);
 
     String geoLocationToString(GeoLocation? location) {
       if (location == null) return '';
@@ -46,7 +46,7 @@ class _TimeZonePageState extends State<TimeZonePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Time Zone')),
+      appBar: AppBar(title: const Text('Where are you?')),
       body: Padding(
         padding: const EdgeInsets.all(48.0),
         child: Center(
