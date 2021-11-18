@@ -18,6 +18,9 @@ class Geodata {
   final _cities = <String, List<GeoLocation>>{};
   final _admins = <String, List<GeoLocation>>{};
   final _countries = <String, List<GeoLocation>>{};
+  late final Map<String, String> _countries2;
+
+  String? country2(String country) => _countries2[country];
 
   Future<Iterable<GeoLocation>> search(String name) async {
     if (name.isEmpty) return [];
@@ -52,6 +55,7 @@ class Geodata {
         name: line[1],
         admin1: adminCodes[line[10]],
         country: countryCodes[line[8]],
+        country2: line[8],
         latitude: double.tryParse(line[4]),
         longitude: double.tryParse(line[5]),
       );
@@ -59,6 +63,7 @@ class Geodata {
       _admins.insert(city.admin1, city);
       _countries.insert(city.country, city);
     }
+    _countries2 = countryCodes.reverse();
   }
 }
 
@@ -80,6 +85,10 @@ extension _MapList<T> on Map<String, List<T>> {
       this[k]!.add(value);
     }
   }
+}
+
+extension _StringMap on Map<String, String> {
+  Map<String, String> reverse<T>() => Map.fromIterables(values, keys);
 }
 
 Map<String, String> _parseCodes(

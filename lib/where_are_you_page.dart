@@ -72,8 +72,12 @@ class _WhereAreYouPageState extends State<WhereAreYouPage> {
       );
     }
 
+    final answer = model.selectedLocation != null
+        ? '- ${model.selectedLocation?.country} (${model.selectedLocation?.country2})'
+        : '';
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Where are you?')),
+      appBar: AppBar(title: Text('Where are you? $answer')),
       body: Padding(
         padding: const EdgeInsets.all(48.0),
         child: Center(
