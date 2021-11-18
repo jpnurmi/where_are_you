@@ -3,29 +3,29 @@ class GeoLocation {
     this.name,
     this.admin1,
     this.country,
-    this.longitude,
     this.latitude,
+    this.longitude,
   });
 
   final String? name;
   final String? admin1;
   final String? country;
-  final double? longitude;
   final double? latitude;
+  final double? longitude;
 
   GeoLocation copyWith({
     String? name,
     String? admin1,
     String? country,
-    double? longitude,
     double? latitude,
+    double? longitude,
   }) {
     return GeoLocation(
       name: name ?? this.name,
       admin1: admin1 ?? this.admin1,
       country: country ?? this.country,
-      longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 
@@ -34,8 +34,8 @@ class GeoLocation {
       'name': name,
       'admin1': admin1,
       'country': country,
-      'longitude': longitude,
       'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -44,14 +44,14 @@ class GeoLocation {
       name: map['name'],
       admin1: map['admin1'],
       country: map['country'],
-      longitude: double.tryParse(map['longitude']),
       latitude: double.tryParse(map['latitude']),
+      longitude: double.tryParse(map['longitude']),
     );
   }
 
   @override
   String toString() =>
-      'GeoLocation(name: $name, admin1: $admin1, country: $country, longitude: $longitude, latitude: $latitude)';
+      'GeoLocation(name: $name, admin1: $admin1, country: $country, latitude: $latitude, longitude: $longitude)';
 
   @override
   bool operator ==(Object other) {
@@ -60,8 +60,8 @@ class GeoLocation {
         other.name == name &&
         other.admin1 == admin1 &&
         other.country == country &&
-        other.longitude == longitude &&
-        other.latitude == latitude;
+        other.latitude == latitude &&
+        other.longitude == longitude;
   }
 
   @override
@@ -70,8 +70,8 @@ class GeoLocation {
       name.hashCode,
       admin1.hashCode,
       country.hashCode,
-      longitude.hashCode,
       latitude.hashCode,
+      longitude.hashCode,
     );
   }
 }
