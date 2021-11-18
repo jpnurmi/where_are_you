@@ -16,19 +16,31 @@ class GeoService {
   CancelToken? _token;
   final Geodata _geodata;
 
-  Future<void> init() async {}
-
   Future<Iterable<GeoLocation>> search(
     String name, {
     String? release,
     String? lang,
-  }) async {
-    return _geodata.search(name);
+    bool? online,
+  }) {
+    return Future.wait([
+      _searchOffline(name),
+      if (online == true) _searchOnline(name, release, lang),
+    ]).then((value) => Set.of(value.expand((e) => e)));
+  }
 
-    // return _cancelQuery()
-    //     .then((_) => _sendQuery(name, release, lang))
-    //     .then(_onQueryResponse)
-    //     .catchError(_onQueryError);
+  Future<Iterable<GeoLocation>> _searchOffline(String name) {
+    return _geodata.search(name);
+  }
+
+  Future<Iterable<GeoLocation>> _searchOnline(
+    String name,
+    String? release,
+    String? lang,
+  ) {
+    return _cancelQuery()
+        .then((_) => _sendQuery(name, release, lang))
+        .then(_onQueryResponse)
+        .catchError(_onQueryError);
   }
 
   Future<void> _cancelQuery() async => _token?.cancel();

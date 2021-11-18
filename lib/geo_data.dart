@@ -52,8 +52,8 @@ class Geodata {
         name: line[1],
         admin1: adminCodes[line[10]],
         country: countryCodes[line[8]],
-        longitude: double.tryParse(line[4]),
-        latitude: double.tryParse(line[5]),
+        latitude: double.tryParse(line[4]),
+        longitude: double.tryParse(line[5]),
       );
       _cities.insert(city.name, city);
       _admins.insert(city.admin1, city);
@@ -65,10 +65,10 @@ class Geodata {
 extension _MapList<T> on Map<String, List<T>> {
   List<T> find(String key, bool Function(String, T) f) {
     if (key.isEmpty) return [];
-    final k = key[0].toLowerCase();
+    final l = key.toLowerCase();
     final m = <T>[];
-    for (final v in this[k] ?? []) {
-      if (f(k, v)) m.add(v);
+    for (final v in this[l[0]] ?? []) {
+      if (f(l, v)) m.add(v);
     }
     return m;
   }

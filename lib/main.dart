@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'geo_data.dart';
 import 'geo_service.dart';
+import 'network_service.dart';
 import 'where_are_you_page.dart';
 
 Future<void> main() async {
@@ -15,8 +16,11 @@ Future<void> main() async {
     loadCountries: () => rootBundle.loadString('assets/countryInfo.txt'),
   );
 
-  runApp(Provider(
-    create: (_) => GeoService(geodata),
+  runApp(MultiProvider(
+    providers: [
+      Provider(create: (_) => GeoService(geodata)),
+      Provider(create: (_) => NetworkService()),
+    ],
     child: const MaterialApp(home: Builder(builder: WhereAreYouPage.create)),
   ));
 }
