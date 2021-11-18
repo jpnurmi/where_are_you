@@ -22,12 +22,25 @@ class Geodata {
   Future<Iterable<GeoLocation>> search(String name) async {
     if (name.isEmpty) return [];
     await _ensureInitialized();
-    final f = <GeoLocation>{
-      ..._cities.find(name, (c) => c.name?.caseStartsWith(name) == true),
-      ..._admins.find(name, (c) => c.name?.caseStartsWith(name) == true),
-      ..._countries.find(name, (c) => c.name?.caseStartsWith(name) == true),
+    return <GeoLocation>{
+      ..._cities.find(name, _cityWhere),
+      ..._admins.find(name, _adminWhere),
+      ..._countries.find(name, _countryWhere),
     };
-    return f;
+  }
+
+  static bool _cityWhere(String name, GeoLocation city) {
+    return city.name?.toLowerCase().startsWith(name) == true;
+  }
+
+  static bool _adminWhere(String name, GeoLocation city) {
+    return _cityWhere(name, city) ||
+        city.admin1?.toLowerCase().startsWith(name) == true;
+  }
+
+  static bool _countryWhere(String name, GeoLocation city) {
+    return _cityWhere(name, city) ||
+        city.country?.toLowerCase().startsWith(name) == true;
   }
 
   Future<void> _ensureInitialized() async {
@@ -50,12 +63,12 @@ class Geodata {
 }
 
 extension _MapList<T> on Map<String, List<T>> {
-  List<T> find(String key, bool Function(T) f) {
+  List<T> find(String key, bool Function(String, T) f) {
     if (key.isEmpty) return [];
     final k = key[0].toLowerCase();
     final m = <T>[];
     for (final v in this[k] ?? []) {
-      if (f(v)) m.add(v);
+      if (f(k, v)) m.add(v);
     }
     return m;
   }
@@ -66,12 +79,6 @@ extension _MapList<T> on Map<String, List<T>> {
       this[k] ??= <T>[];
       this[k]!.add(value);
     }
-  }
-}
-
-extension _StringX on String {
-  bool caseStartsWith(String other) {
-    return toLowerCase().startsWith(other.toLowerCase());
   }
 }
 
