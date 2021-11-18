@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geocoder_offline/geocoder_offline.dart';
-import 'package:latlong2/latlong.dart';
 
 part 'geo_service.freezed.dart';
 part 'geo_service.g.dart';
@@ -35,19 +34,6 @@ class GeoService {
   CancelToken? _token;
 
   Future<void> init() async {}
-
-  Future<Iterable<GeoLocation>> searchPoint(LatLng point) async {
-    print('search point: $point');
-    final results = _geocode.search(point.latitude, point.longitude);
-    return results.map(
-      (result) => GeoLocation(
-        name: result.location.featureName,
-        country: result.location.state,
-        latitude: result.location.latitude,
-        longitude: result.location.longitude,
-      ),
-    );
-  }
 
   Future<Iterable<GeoLocation>> searchName(
     String name, {

@@ -10,10 +10,8 @@ dependencies:
   file: ^6.1.2
   flutter:
     sdk: flutter
-  flutter_map: ^0.14.0
   freezed_annotation: ^1.0.0
   geocoder_offline: ^0.2.1
-  latlong2: ^0.8.1
   provider: ^6.0.1
 
 dev_dependencies:
