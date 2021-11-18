@@ -59,7 +59,7 @@ class _TimeZonePageState extends State<TimeZonePage> {
                 options: MapOptions(
                   zoom: 1.0,
                   interactiveFlags: InteractiveFlag.none,
-                  onTap: (point) => model
+                  onTap: (pos, point) => model
                       .searchPoint(point)
                       .then((_) => model.selectFirstLocation()),
                   screenSize: const Size(10 * 1167.0, 10 * 1071.0),

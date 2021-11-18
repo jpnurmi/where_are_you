@@ -1,29 +1,28 @@
-name: flutter_time_zone_map
-description: Time zone map.
+name: where_are_you
+description: Where are you?
 publish_to: 'none'
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  dio: ^4.0.3
+  file: ^6.1.2
   flutter:
     sdk: flutter
-  dio: 
-  file: 
-  flutter_map: 
-  flutter_typeahead: 
-  freezed_annotation: 
-  geocoder_offline:
-  latlong2: 
-  provider:
+  flutter_map: ^0.14.0
+  freezed_annotation: ^1.0.0
+  geocoder_offline: ^0.2.1
+  latlong2: ^0.8.1
+  provider: ^6.0.1
 
 dev_dependencies:
+  build_runner: ^2.1.5
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
-  build_runner:
-  flutter_lints: 
-  freezed: 
-  json_serializable: 
+  freezed: ^1.0.0
+  json_serializable: ^6.0.1
 
 flutter:
   uses-material-design: true
