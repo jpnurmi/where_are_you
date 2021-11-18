@@ -1,26 +1,31 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'geo_location.dart';
 
 class Geodata {
   Geodata({
-    required Future<String> Function() loadCities,
-    required Future<String> Function() loadAdmins,
-    required Future<String> Function() loadCountries,
+    required FutureOr<String> Function() loadCities,
+    required FutureOr<String> Function() loadAdmins,
+    required FutureOr<String> Function() loadCountries,
   })  : _loadCities = loadCities,
         _loadAdmins = loadAdmins,
         _loadCountries = loadCountries;
 
-  final Future<String> Function() _loadCities;
-  final Future<String> Function() _loadAdmins;
-  final Future<String> Function() _loadCountries;
+  final FutureOr<String> Function() _loadCities;
+  final FutureOr<String> Function() _loadAdmins;
+  final FutureOr<String> Function() _loadCountries;
 
+  var _initialized = false;
   final _cities = <String, List<GeoLocation>>{};
   final _admins = <String, List<GeoLocation>>{};
   final _countries = <String, List<GeoLocation>>{};
   late final Map<String, String> _countries2;
 
-  String? country2(String country) => _countries2[country];
+  Future<String?> country2(String country) async {
+    await _ensureInitialized();
+    return _countries2[country];
+  }
 
   Future<Iterable<GeoLocation>> search(String name) async {
     if (name.isEmpty) return [];
@@ -47,7 +52,8 @@ class Geodata {
   }
 
   Future<void> _ensureInitialized() async {
-    if (_cities.isNotEmpty) return;
+    if (_initialized) return;
+    _initialized = true;
     final adminCodes = _parseCodes(await _loadAdmins(), code: 0, name: 1);
     final countryCodes = _parseCodes(await _loadCountries(), code: 0, name: 4);
     for (final line in _splitGeodata(await _loadCities())) {

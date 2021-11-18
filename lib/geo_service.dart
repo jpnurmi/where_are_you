@@ -72,8 +72,8 @@ class GeoService {
 
   Future<Iterable<GeoLocation>> _onQueryResponse(Response response) async {
     final items = json.decode(response.data.toString()) as Iterable;
-    return items.map((json) => GeoLocation.fromJson(json)
-        .copyWith(country2: _geodata.country2(json['country'])));
+    return Future.wait(items.map((json) async => GeoLocation.fromJson(json)
+        .copyWith(country2: await _geodata.country2(json['country']))));
   }
 
   Future<GeoLocation?> _lookupGeoIP() async {
