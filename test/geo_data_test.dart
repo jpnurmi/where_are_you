@@ -1,17 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:where_are_you/geo_data.dart';
 import 'package:where_are_you/geo_location.dart';
 
 import 'test_geodata.dart';
 
 void main() {
   test('search', () async {
-    final geodata = Geodata(
-      loadCities: () => kCities,
-      loadAdmins: () => kAdmins,
-      loadCountries: () => kCountries,
-    );
-
     await geodata.search('').then((result) => expect(result, isEmpty));
 
     await geodata.search('o').then((result) {
@@ -66,12 +59,6 @@ void main() {
   });
 
   test('json', () async {
-    final geodata = Geodata(
-      loadCities: () => kCities,
-      loadAdmins: () => kAdmins,
-      loadCountries: () => kCountries,
-    );
-
     expect(
       await geodata.fromJson(<String, dynamic>{
         'name': 'Copenhagen',
@@ -105,12 +92,6 @@ void main() {
   });
 
   test('xml', () async {
-    final geodata = Geodata(
-      loadCities: () => kCities,
-      loadAdmins: () => kAdmins,
-      loadCountries: () => kCountries,
-    );
-
     expect(
       await geodata.fromXml('''
 <Response>

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:where_are_you/geo_data.dart';
 import 'package:where_are_you/geo_exception.dart';
 import 'package:where_are_you/geo_location.dart';
 import 'package:where_are_you/geo_name.dart';
@@ -36,12 +35,6 @@ void main() {
   );
 
   test('search', () async {
-    final geodata = Geodata(
-      loadCities: () => kCities,
-      loadAdmins: () => kAdmins,
-      loadCountries: () => kCountries,
-    );
-
     final dio = MockDio();
     when(dio.get(
       'http://lookup.geoname.org',
@@ -78,12 +71,6 @@ void main() {
   });
 
   test('lang & release', () async {
-    final geodata = Geodata(
-      loadCities: () => kCities,
-      loadAdmins: () => kAdmins,
-      loadCountries: () => kCountries,
-    );
-
     final dio = MockDio();
     when(dio.get(
       'http://lookup.geoname.org',
@@ -113,12 +100,6 @@ void main() {
   });
 
   test('error', () async {
-    final geodata = Geodata(
-      loadCities: () => kCities,
-      loadAdmins: () => kAdmins,
-      loadCountries: () => kCountries,
-    );
-
     final dio = MockDio();
     when(dio.get(
       'http://lookup.geoname.org',

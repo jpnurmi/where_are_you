@@ -1,3 +1,11 @@
+import 'package:where_are_you/geo_data.dart';
+
+final geodata = Geodata(
+  loadCities: () => kCities,
+  loadAdmins: () => kAdmins,
+  loadCountries: () => kCountries,
+);
+
 const kCities = r'''
 3161732	Bergen	Bergen	BGO,Bargen,Berga,Bergen,Bergen (Hordaland Fylke),Bergena,Bergenas,Bergeno,Bergn,Bernken,Birgon,Bjoergvin,Björgvin,baragena,bargana,bei er gen,beleugen,bergeni,berugen,brghn,brgn,perkan,Μπέργκεν,Берген,ברגן,برغن,برگن,बार्गन,বারগেন,பேர்கன்,แบร์เกน,ბერგენი,ベルゲン,卑爾根,베르겐	60.39299	5.32415	P	PPLA	NO		46	4601			213585		20	Europe/Oslo	2021-07-30
 2618425	Copenhagen	Copenhagen	CPH,Cobanhavan,Copenaga,Copenaghen,Copenaguen,Copenhaga,Copenhagen,Copenhague,Copenhaguen,Copenhaguen - Kobenhavn,Copenhaguen - København,Cóbanhávan,Hafnia,Kapehngagen,Kaupmannahoefn,Kaupmannahöfn,Keypmannahavn,Kjobenhavn,Kjopenhamn,Kjøpenhamn,Kobenhamman,Kobenhaven,Kobenhavn,Kodan,Kodaň,Koebenhavn,Koeoepenhamina,Koepenhamn,Kopenage,Kopenchage,Kopengagen,Kopenhaagen,Kopenhag,Kopenhaga,Kopenhage,Kopenhagen,Kopenhagena,Kopenhago,Kopenhāgena,Kopenkhagen,Koppenhaga,Koppenhága,Kòpenhaga,Köbenhavn,Köpenhamn,Kööpenhamina,København,Københámman,ge ben ha gen,khopenheken,kopanahagana,kopenahagena,kopenahegena,kopenhagen,kwbnhaghn,kwpnhgn,qwpnhgn,Κοπεγχάγη,Капэнгаген,Копенгаген,Копенхаген,Կոպենհագեն,קופנהאגן,קופנהגן,كوبنهاغن,كوپېنھاگېن,ܟܘܦܢܗܓܢ,कोपनहागन,কোপেনহাগেন,কোপেনহেগেন,โคเปนเฮเกน,ཀའོ་པེན་ཧ་ཀེན,კოპენჰაგენი,ኮፐንሀገን,ኮፕንሀግ,コペンハーゲン,哥本哈根,코펜하겐	55.67594	12.56553	P	PPLC	DK		17	101			1153615		14	Europe/Copenhagen	2012-11-26
