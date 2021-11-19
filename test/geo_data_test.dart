@@ -68,15 +68,7 @@ void main() {
         'longitude': '12.56553',
         'timezone': 'Europe/Copenhagen',
       }),
-      GeoLocation(
-        name: 'Copenhagen',
-        admin: 'Capital Region',
-        country: 'Denmark',
-        country2: 'DK',
-        latitude: 55.67594,
-        longitude: 12.56553,
-        timezone: 'Europe/Copenhagen',
-      ),
+      copenhagen,
     );
 
     expect(
@@ -84,7 +76,7 @@ void main() {
         'latitude': 55.67594,
         'longitude': 12.56553,
       }),
-      GeoLocation(
+      const GeoLocation(
         latitude: 55.67594,
         longitude: 12.56553,
       ),

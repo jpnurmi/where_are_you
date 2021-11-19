@@ -12,6 +12,16 @@ const copenhagen = GeoLocation(
   timezone: 'Europe/Copenhagen',
 );
 
+const gothenburg = GeoLocation(
+  name: 'Göteborg',
+  admin: 'Vastra Gotaland',
+  country: 'Sweden',
+  country2: 'SE',
+  latitude: 57.70716,
+  longitude: 11.96679,
+  timezone: 'Europe/Stockholm',
+);
+
 Response jsonResponse(GeoLocation city) {
   return Response(
     data: '''

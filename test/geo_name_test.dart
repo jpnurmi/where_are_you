@@ -27,7 +27,7 @@ void main() {
       kTestUrl,
       queryParameters: <String, String>{'query': 'foo'},
       cancelToken: anyNamed('cancelToken'),
-    ));
+    )).called(1);
   });
 
   test('lang & release', () async {
@@ -55,7 +55,7 @@ void main() {
         'lang': 'baz',
       },
       cancelToken: anyNamed('cancelToken'),
-    ));
+    )).called(1);
   });
 
   test('error', () async {

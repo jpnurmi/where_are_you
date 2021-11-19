@@ -22,7 +22,7 @@ void main() {
     final geoip = GeoIP(url: kTestUrl, geodata: geodata, dio: dio);
 
     expect(await geoip.lookup(), copenhagen);
-    verify(dio.get(kTestUrl, cancelToken: anyNamed('cancelToken')));
+    verify(dio.get(kTestUrl, cancelToken: anyNamed('cancelToken'))).called(1);
   });
 
   test('error', () async {
