@@ -11,7 +11,7 @@ import 'geo_source.dart';
 final _options = BaseOptions(
   connectTimeout: 1000,
   receiveTimeout: 1000,
-  responseType: ResponseType.json,
+  responseType: ResponseType.plain,
 );
 
 class Geoname implements GeoSource {
