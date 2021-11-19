@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:xml/xml.dart';
 
+import 'geo_source.dart';
 import 'geo_location.dart';
 
-class Geodata {
+class Geodata implements GeoSource {
   Geodata({
     required FutureOr<String> Function() loadCities,
     required FutureOr<String> Function() loadAdmins,
@@ -56,6 +57,7 @@ class Geodata {
     }
   }
 
+  @override
   Future<Iterable<GeoLocation>> search(String name) async {
     if (name.isEmpty) return [];
     await _ensureInitialized();

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'geo_location.dart';
 import 'geo_service.dart';
-import 'network_service.dart';
 import 'where_are_you_model.dart';
 
 class FakeLocalizations {
@@ -22,11 +21,9 @@ class WhereAreYouPage extends StatefulWidget {
   const WhereAreYouPage({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
+    final service = Provider.of<GeoService>(context, listen: false);
     return ChangeNotifierProvider(
-      create: (_) => WhereAreYouModel(
-        geo: Provider.of<GeoService>(context, listen: false),
-        network: Provider.of<NetworkService>(context, listen: false),
-      ),
+      create: (_) => WhereAreYouModel(service),
       child: const WhereAreYouPage(),
     );
   }
@@ -91,16 +88,6 @@ class _WhereAreYouPageState extends State<WhereAreYouPage> {
                 )
               : const CircularProgressIndicator(),
         ),
-      ),
-      floatingActionButton: Row(
-        children: [
-          const Spacer(),
-          const Text('Online'),
-          Switch(
-            value: model.isOnline,
-            onChanged: (v) => model.setOnline(v),
-          ),
-        ],
       ),
     );
   }

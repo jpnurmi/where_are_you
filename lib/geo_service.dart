@@ -1,85 +1,22 @@
-import 'dart:convert';
+import 'package:where_are_you/geo_ip.dart';
 
-import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
-
-import 'geo_data.dart';
 import 'geo_location.dart';
-
-const _kGeoIPLookupUrl = 'https://geoip.ubuntu.com/lookup';
-const _kGeonameLookupUrl = 'http://geoname-lookup.ubuntu.com/';
+import 'geo_source.dart';
 
 class GeoService {
-  GeoService(this._geodata, {@visibleForTesting Dio? dio})
-      : _dio = dio ?? Dio();
+  GeoService(GeoIP geoip) : _geoip = geoip;
 
-  final Dio _dio;
-  CancelToken? _token;
-  final Geodata _geodata;
+  final GeoIP _geoip;
+  final _geosources = <GeoSource>[];
 
-  Future<GeoLocation?> init() => _lookupGeoIP();
+  Future<GeoLocation?> init() => _geoip.lookup();
 
-  Future<Iterable<GeoLocation>> search(
-    String name, {
-    String? release,
-    String? lang,
-    bool? online,
-  }) {
+  void addSource(GeoSource source) => _geosources.add(source);
+  void removeSource(GeoSource source) => _geosources.remove(source);
+
+  Future<Iterable<GeoLocation>> search(String name) {
     return Future.wait([
-      _searchOffline(name),
-      if (online == true) _searchOnline(name, release, lang),
+      for (final geosource in _geosources) geosource.search(name),
     ]).then((value) => Set.of(value.expand((e) => e)));
-  }
-
-  Future<Iterable<GeoLocation>> _searchOffline(String name) {
-    return _geodata.search(name);
-  }
-
-  Future<Iterable<GeoLocation>> _searchOnline(
-    String name,
-    String? release,
-    String? lang,
-  ) {
-    return _cancelQuery()
-        .then((_) => _sendQuery(name, release, lang))
-        .then(_onQueryResponse)
-        .catchError(_onQueryError);
-  }
-
-  Future<void> _cancelQuery() async => _token?.cancel();
-
-  Future<Response> _sendQuery(String query, String? release, String? lang) {
-    return _dio.get(
-      _kGeonameLookupUrl,
-      queryParameters: <String, String>{
-        'query': query,
-        if (release != null) 'release': release,
-        if (lang != null) 'lang': lang,
-      },
-      cancelToken: _token = CancelToken(),
-      options: Options(responseType: ResponseType.plain),
-    );
-  }
-
-  Future<Iterable<GeoLocation>> _onQueryError(Object? error) async {
-    if (error is DioError && CancelToken.isCancel(error)) {
-      print('CANCEL: ${error.message}');
-    } else {
-      print('TODO: $error');
-    }
-    return const <GeoLocation>[];
-  }
-
-  Future<Iterable<GeoLocation>> _onQueryResponse(Response response) async {
-    final items = json.decode(response.data.toString()) as Iterable;
-    return Future.wait(items.map((json) => _geodata.fromJson(json)));
-  }
-
-  Future<GeoLocation?> _lookupGeoIP() async {
-    final response = await _dio.get(
-      _kGeoIPLookupUrl,
-      options: Options(responseType: ResponseType.plain),
-    );
-    return _geodata.fromXml(response.data.toString());
   }
 }

@@ -2,17 +2,11 @@ import 'package:flutter/foundation.dart';
 
 import 'geo_location.dart';
 import 'geo_service.dart';
-import 'network_service.dart';
 
 class WhereAreYouModel extends ChangeNotifier {
-  WhereAreYouModel({
-    required GeoService geo,
-    required NetworkService network,
-  })  : _geo = geo,
-        _network = network;
+  WhereAreYouModel(GeoService service) : _service = service;
 
-  final GeoService _geo;
-  final NetworkService _network;
+  final GeoService _service;
 
   String? lang;
   String? release;
@@ -25,18 +19,11 @@ class WhereAreYouModel extends ChangeNotifier {
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    await _network.connect();
-    if (isOnline) _selectedLocation = await _geo.init();
-    _initialized = true;
-    notifyListeners();
-  }
-
-  bool? _online;
-  bool get isOnline => _online ?? _network.isOnline;
-  void setOnline(bool? online) {
-    if (_online == online) return;
-    _online = online;
-    notifyListeners();
+    _service.init().then((location) {
+      _initialized = true;
+      _selectedLocation = location;
+      notifyListeners();
+    });
   }
 
   GeoLocation? get selectedLocation => _selectedLocation;
@@ -59,8 +46,6 @@ class WhereAreYouModel extends ChangeNotifier {
     if (name.isEmpty || _lastName == name) return [];
     _lastName = name;
     _selectedLocation = null;
-    return _geo
-        .search(name, lang: lang, release: release, online: isOnline)
-        .then(_updateLocations);
+    return _service.search(name).then(_updateLocations);
   }
 }
