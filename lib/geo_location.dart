@@ -1,5 +1,5 @@
 class GeoLocation {
-  GeoLocation({
+  const GeoLocation({
     this.name,
     this.admin,
     this.country,

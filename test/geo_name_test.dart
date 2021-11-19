@@ -3,44 +3,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:where_are_you/geo_exception.dart';
-import 'package:where_are_you/geo_location.dart';
 import 'package:where_are_you/geo_name.dart';
 
 import 'geo_name_test.mocks.dart';
 import 'test_geodata.dart';
+
+const kTestUrl = 'http://lookup.geoname.org';
 
 @GenerateMocks([Dio])
 void main() {
   test('search', () async {
     final dio = MockDio();
     when(dio.get(
-      'http://lookup.geoname.org',
+      kTestUrl,
       queryParameters: anyNamed('queryParameters'),
       cancelToken: anyNamed('cancelToken'),
-    )).thenAnswer((_) async => jsonResponse);
+    )).thenAnswer((_) async => jsonResponse(copenhagen));
 
-    final geoname = Geoname(
-      url: 'http://lookup.geoname.org',
-      geodata: geodata,
-      dio: dio,
-    );
+    final geoname = Geoname(url: kTestUrl, geodata: geodata, dio: dio);
 
-    expect(
-      await geoname.search('foo'),
-      [
-        GeoLocation(
-          name: 'Copenhagen',
-          admin: 'Capital Region',
-          country: 'Denmark',
-          country2: 'DK',
-          latitude: 55.67594,
-          longitude: 12.56553,
-          timezone: 'Europe/Copenhagen',
-        )
-      ],
-    );
+    expect(await geoname.search('foo'), [copenhagen]);
     verify(dio.get(
-      'http://lookup.geoname.org',
+      kTestUrl,
       queryParameters: <String, String>{'query': 'foo'},
       cancelToken: anyNamed('cancelToken'),
     ));
@@ -49,13 +33,13 @@ void main() {
   test('lang & release', () async {
     final dio = MockDio();
     when(dio.get(
-      'http://lookup.geoname.org',
+      kTestUrl,
       queryParameters: anyNamed('queryParameters'),
       cancelToken: anyNamed('cancelToken'),
-    )).thenAnswer((_) async => jsonResponse);
+    )).thenAnswer((_) async => jsonResponse(copenhagen));
 
     final geoname = Geoname(
-      url: 'http://lookup.geoname.org',
+      url: kTestUrl,
       geodata: geodata,
       release: 'bar',
       lang: 'baz',
@@ -64,7 +48,7 @@ void main() {
 
     await geoname.search('foo');
     verify(dio.get(
-      'http://lookup.geoname.org',
+      kTestUrl,
       queryParameters: <String, String>{
         'query': 'foo',
         'release': 'bar',
@@ -77,13 +61,13 @@ void main() {
   test('error', () async {
     final dio = MockDio();
     when(dio.get(
-      'http://lookup.geoname.org',
+      kTestUrl,
       queryParameters: anyNamed('queryParameters'),
       cancelToken: anyNamed('cancelToken'),
     )).thenAnswer((_) async => errorResponse);
 
     final geoname = Geoname(
-      url: 'http://lookup.geoname.org',
+      url: kTestUrl,
       geodata: geodata,
       release: 'bar',
       lang: 'baz',

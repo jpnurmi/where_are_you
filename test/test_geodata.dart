@@ -1,40 +1,56 @@
 import 'package:dio/dio.dart';
 import 'package:where_are_you/geo_data.dart';
+import 'package:where_are_you/geo_location.dart';
 
-final jsonResponse = Response(
-  data: '''
+const copenhagen = GeoLocation(
+  name: 'Copenhagen',
+  admin: 'Capital Region',
+  country: 'Denmark',
+  country2: 'DK',
+  latitude: 55.67594,
+  longitude: 12.56553,
+  timezone: 'Europe/Copenhagen',
+);
+
+Response jsonResponse(GeoLocation city) {
+  return Response(
+    data: '''
 [
   {
-    "name": "Copenhagen",
-    "admin1": "Capital Region",
-    "country": "Denmark",
-    "latitude": "55.67594",
-    "longitude": "12.56553",
-    "timezone": "Europe/Copenhagen"
+    "name": "${city.name}",
+    "admin1": "${city.admin}",
+    "country": "${city.country}",
+    "country2": "${city.country2}",
+    "latitude": "${city.latitude}",
+    "longitude": "${city.longitude}",
+    "timezone": "${city.timezone}"
   }
 ]
 ''',
-  statusCode: 200,
-  requestOptions: RequestOptions(path: '/'),
-);
+    statusCode: 200,
+    requestOptions: RequestOptions(path: '/'),
+  );
+}
 
-final xmlResponse = Response(
-  data: '''
+Response xmlResponse(GeoLocation city) {
+  return Response(
+    data: '''
 <Response>
   <Ip>127.0.0.1</Ip>
   <Status>OK</Status>
-  <CountryCode>DK</CountryCode>
-  <CountryName>Denmark</CountryName>
-  <RegionName>Capital Region</RegionName>
-  <City>Copenhagen</City>
-  <Latitude>55.67594</Latitude>
-  <Longitude>12.56553</Longitude>
-  <TimeZone>Europe/Copenhagen</TimeZone>
+  <CountryCode>${city.country2}</CountryCode>
+  <CountryName>${city.country}</CountryName>
+  <RegionName>${city.admin}</RegionName>
+  <City>${city.name}</City>
+  <Latitude>${city.latitude}</Latitude>
+  <Longitude>${city.longitude}</Longitude>
+  <TimeZone>${city.timezone}</TimeZone>
   </Response>
 ''',
-  statusCode: 200,
-  requestOptions: RequestOptions(path: '/'),
-);
+    statusCode: 200,
+    requestOptions: RequestOptions(path: '/'),
+  );
+}
 
 final errorResponse = Response(
   data: null,
