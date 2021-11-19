@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+coverage/
 
 # IntelliJ related
 *.iml
@@ -32,8 +33,9 @@
 /build/
 pubspec.lock
 
-# Web related
-lib/generated_plugin_registrant.dart
+# Linux related
+generated_plugins.cmake
+generated_plugin_registrant.*
 
 # Symbolication related
 app.*.symbols
