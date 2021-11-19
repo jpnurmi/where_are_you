@@ -34,15 +34,15 @@ class Geoname implements GeoSource {
 
   @override
   Future<Iterable<GeoLocation>> search(String name) {
-    return _cancelQuery()
-        .then((_) => _sendQuery(name))
-        .then(_onQueryResponse)
-        .catchError(_onQueryError);
+    return _cancel()
+        .then((_) => _send(name))
+        .then(_onResponse)
+        .catchError(_onError);
   }
 
-  Future<void> _cancelQuery() async => _token?.cancel();
+  Future<void> _cancel() async => _token?.cancel();
 
-  Future<Response> _sendQuery(String query) {
+  Future<Response> _send(String query) {
     return _dio.get(
       url,
       queryParameters: <String, String>{
@@ -54,7 +54,7 @@ class Geoname implements GeoSource {
     );
   }
 
-  Future<Iterable<GeoLocation>> _onQueryResponse(Response response) async {
+  Future<Iterable<GeoLocation>> _onResponse(Response response) async {
     if (response.statusCode != 200) {
       throw GeoException(response.statusMessage ?? 'Unknown error');
     }
@@ -65,7 +65,7 @@ class Geoname implements GeoSource {
     return Future.wait(items.map((json) => _geodata.fromJson(json)));
   }
 
-  Future<Iterable<GeoLocation>> _onQueryError(Object? error) async {
+  Future<Iterable<GeoLocation>> _onError(Object? error) async {
     if (error is DioError) {
       if (!CancelToken.isCancel(error)) throw GeoException(error.message);
     } else if (error != null) {

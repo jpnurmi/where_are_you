@@ -11,37 +11,13 @@ import 'test_geodata.dart';
 
 @GenerateMocks([Dio])
 void main() {
-  final response = Response(
-    data: '''
-[
-  {
-    "name": "Copenhagen",
-    "admin1": "Capital Region",
-    "country": "Denmark",
-    "latitude": "55.67594",
-    "longitude": "12.56553",
-    "timezone": "Europe/Copenhagen"
-  }
-]
-''',
-    statusCode: 200,
-    requestOptions: RequestOptions(path: '/'),
-  );
-
-  final errorResponse = Response(
-    data: null,
-    statusCode: 500,
-    requestOptions: RequestOptions(path: '/'),
-  );
-
   test('search', () async {
     final dio = MockDio();
     when(dio.get(
       'http://lookup.geoname.org',
       queryParameters: anyNamed('queryParameters'),
       cancelToken: anyNamed('cancelToken'),
-      onReceiveProgress: null,
-    )).thenAnswer((_) async => response);
+    )).thenAnswer((_) async => jsonResponse);
 
     final geoname = Geoname(
       url: 'http://lookup.geoname.org',
@@ -76,8 +52,7 @@ void main() {
       'http://lookup.geoname.org',
       queryParameters: anyNamed('queryParameters'),
       cancelToken: anyNamed('cancelToken'),
-      onReceiveProgress: null,
-    )).thenAnswer((_) async => response);
+    )).thenAnswer((_) async => jsonResponse);
 
     final geoname = Geoname(
       url: 'http://lookup.geoname.org',
@@ -105,7 +80,6 @@ void main() {
       'http://lookup.geoname.org',
       queryParameters: anyNamed('queryParameters'),
       cancelToken: anyNamed('cancelToken'),
-      onReceiveProgress: null,
     )).thenAnswer((_) async => errorResponse);
 
     final geoname = Geoname(

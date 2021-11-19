@@ -1,4 +1,46 @@
+import 'package:dio/dio.dart';
 import 'package:where_are_you/geo_data.dart';
+
+final jsonResponse = Response(
+  data: '''
+[
+  {
+    "name": "Copenhagen",
+    "admin1": "Capital Region",
+    "country": "Denmark",
+    "latitude": "55.67594",
+    "longitude": "12.56553",
+    "timezone": "Europe/Copenhagen"
+  }
+]
+''',
+  statusCode: 200,
+  requestOptions: RequestOptions(path: '/'),
+);
+
+final xmlResponse = Response(
+  data: '''
+<Response>
+  <Ip>127.0.0.1</Ip>
+  <Status>OK</Status>
+  <CountryCode>DK</CountryCode>
+  <CountryName>Denmark</CountryName>
+  <RegionName>Capital Region</RegionName>
+  <City>Copenhagen</City>
+  <Latitude>55.67594</Latitude>
+  <Longitude>12.56553</Longitude>
+  <TimeZone>Europe/Copenhagen</TimeZone>
+  </Response>
+''',
+  statusCode: 200,
+  requestOptions: RequestOptions(path: '/'),
+);
+
+final errorResponse = Response(
+  data: null,
+  statusCode: 500,
+  requestOptions: RequestOptions(path: '/'),
+);
 
 final geodata = Geodata(
   loadCities: () => kCities,
