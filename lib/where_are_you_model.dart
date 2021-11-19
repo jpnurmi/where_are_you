@@ -43,7 +43,8 @@ class WhereAreYouModel extends ChangeNotifier {
   }
 
   Future<Iterable<GeoLocation>> searchLocation(String name) async {
-    if (name.isEmpty || _lastName == name) return [];
+    if (name.isEmpty) return [];
+    if (_lastName == name) return _locations;
     _lastName = name;
     _selectedLocation = null;
     return _service.search(name).then(_updateLocations);
