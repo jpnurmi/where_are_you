@@ -37,11 +37,20 @@ void main() {
     when(source2.search('foo')).thenAnswer((_) async => [copenhagen]);
 
     final service = GeoService(MockGeoIP());
+    expect(await service.search('foo'), []);
+    verifyNever(source1.search('foo'));
+    verifyNever(source2.search('foo'));
+
     service.addSource(source1);
     service.addSource(source2);
 
     expect(await service.search('foo'), [copenhagen, gothenburg]);
     verify(source1.search('foo')).called(1);
+    verify(source2.search('foo')).called(1);
+
+    service.removeSource(source1);
+    expect(await service.search('foo'), [copenhagen]);
+    verifyNever(source1.search('foo'));
     verify(source2.search('foo')).called(1);
   });
 }
