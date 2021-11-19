@@ -1,10 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:where_are_you/geo_service.dart';
+import 'package:ubuntu_desktop_installer/services.dart';
 import 'package:where_are_you/where_are_you_model.dart';
 
-import 'geo_service_test.dart';
 import 'where_are_you_model_test.mocks.dart';
 
 @GenerateMocks([GeoService])
@@ -76,3 +75,23 @@ void main() {
     expect(wasNotified, isNull);
   });
 }
+
+const copenhagen = GeoLocation(
+  name: 'Copenhagen',
+  admin: 'Capital Region',
+  country: 'Denmark',
+  country2: 'DK',
+  latitude: 55.67594,
+  longitude: 12.56553,
+  timezone: 'Europe/Copenhagen',
+);
+
+const gothenburg = GeoLocation(
+  name: 'Göteborg',
+  admin: 'Vastra Gotaland',
+  country: 'Sweden',
+  country2: 'SE',
+  latitude: 57.70716,
+  longitude: 11.96679,
+  timezone: 'Europe/Stockholm',
+);

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
-
-import 'geo_service.dart';
+import 'package:ubuntu_desktop_installer/services.dart';
 
 class WhereAreYouModel extends ChangeNotifier {
   WhereAreYouModel(GeoService service) : _service = service;

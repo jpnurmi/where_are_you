@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ubuntu_desktop_installer/services.dart';
 
-import 'geo_service.dart';
 import 'where_are_you_model.dart';
 
 class FakeLocalizations {
