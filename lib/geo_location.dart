@@ -1,5 +1,3 @@
-import 'package:xml/xml.dart';
-
 class GeoLocation {
   GeoLocation({
     this.name,
@@ -39,48 +37,6 @@ class GeoLocation {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'admin1': admin,
-      'country': country,
-      'country2': country2,
-      'latitude': latitude,
-      'longitude': longitude,
-      'timezone': timezone,
-    };
-  }
-
-  factory GeoLocation.fromJson(Map<String, dynamic> map) {
-    return GeoLocation(
-      name: map['name'],
-      admin: map['admin1'],
-      country: map['country'],
-      country2: map['country2'],
-      latitude: double.tryParse(map['latitude']),
-      longitude: double.tryParse(map['longitude']),
-      timezone: map['timezone'],
-    );
-  }
-
-  static GeoLocation? fromXml(String xml) {
-    try {
-      final element = XmlDocument.parse(xml).rootElement;
-      if (element.getTextOrNull('Status') != 'OK') return null;
-      return GeoLocation(
-        name: element.getTextOrNull('City'),
-        admin: element.getTextOrNull('CountryRegionName'),
-        country: element.getTextOrNull('CountryName'),
-        country2: element.getTextOrNull('CountryCode'),
-        latitude: element.getDoubleOrNull('Latitude'),
-        longitude: element.getDoubleOrNull('Longitude'),
-        timezone: element.getTextOrNull('TimeZone'),
-      );
-    } on XmlException {
-      return null;
-    }
-  }
-
   @override
   String toString() =>
       'GeoLocation(name: $name, admin: $admin, country: $country, country2: $country2, latitude: $latitude, longitude: $longitude, timezone: $timezone)';
@@ -110,10 +66,4 @@ class GeoLocation {
       timezone,
     );
   }
-}
-
-extension _XmlElementX on XmlElement? {
-  String? getTextOrNull(String name) => this?.getElement(name)?.text;
-  double? getDoubleOrNull(String name) =>
-      double.tryParse(getTextOrNull(name) ?? '');
 }

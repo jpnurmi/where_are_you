@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:xml/xml.dart';
+
 import 'geo_location.dart';
 
 class Geodata {
@@ -22,9 +24,36 @@ class Geodata {
   final _countries = <String, List<GeoLocation>>{};
   late final Map<String, String> _countries2;
 
-  Future<String?> country2(String country) async {
+  Future<GeoLocation> fromJson(Map<String, dynamic> json) async {
     await _ensureInitialized();
-    return _countries2[country];
+    return GeoLocation(
+      name: json.getStringOrNull('name'),
+      admin: json.getStringOrNull('admin1'),
+      country: json.getStringOrNull('country'),
+      country2: json.getStringOrNull('country2', _countries2[json['country']]),
+      latitude: json.getDoubleOrNull('latitude'),
+      longitude: json.getDoubleOrNull('longitude'),
+      timezone: json.getStringOrNull('timezone'),
+    );
+  }
+
+  Future<GeoLocation?> fromXml(String xml) async {
+    await _ensureInitialized();
+    try {
+      final element = XmlDocument.parse(xml).rootElement;
+      if (element.getTextOrNull('Status') != 'OK') return null;
+      return GeoLocation(
+        name: element.getTextOrNull('City'),
+        admin: element.getTextOrNull('RegionName'),
+        country: element.getTextOrNull('CountryName'),
+        country2: element.getTextOrNull('CountryCode'),
+        latitude: element.getDoubleOrNull('Latitude'),
+        longitude: element.getDoubleOrNull('Longitude'),
+        timezone: element.getTextOrNull('TimeZone'),
+      );
+    } on XmlException {
+      return null;
+    }
   }
 
   Future<Iterable<GeoLocation>> search(String name) async {
@@ -55,9 +84,9 @@ class Geodata {
   Future<void> _ensureInitialized() async {
     if (_initialized) return;
     _initialized = true;
-    final adminCodes = _parseCodes(await _loadAdmins(), code: 0, name: 1);
-    final countryCodes = _parseCodes(await _loadCountries(), code: 0, name: 4);
-    for (final line in _splitGeodata(await _loadCities())) {
+    final adminCodes = _parse(await _loadAdmins(), code: 0, name: 1);
+    final countryCodes = _parse(await _loadCountries(), code: 0, name: 4);
+    for (final line in _tokenize(await _loadCities())) {
       final city = GeoLocation(
         name: line[1],
         admin: adminCodes['${line[8]}.${line[9]}'],
@@ -71,6 +100,22 @@ class Geodata {
       _countries.insert(city.country, city);
     }
     _countries2 = countryCodes.reverse();
+  }
+}
+
+extension _JsonMap on Map<String, dynamic> {
+  String? getStringOrNull(String key, [String? fallback]) {
+    final value = this[key];
+    return value is String ? value : fallback;
+  }
+
+  double? getDoubleOrNull(String key) {
+    final value = this[key];
+    return value is double
+        ? value
+        : value is String
+            ? double.tryParse(value)
+            : null;
   }
 }
 
@@ -102,20 +147,26 @@ extension _StringMap on Map<String, String> {
   Map<String, String> reverse<T>() => Map.fromIterables(values, keys);
 }
 
-Map<String, String> _parseCodes(
+extension _GetXmlText on XmlElement? {
+  String? getTextOrNull(String name) => this?.getElement(name)?.text;
+  double? getDoubleOrNull(String name) =>
+      double.tryParse(getTextOrNull(name) ?? '');
+}
+
+Map<String, String> _parse(
   String data, {
   required int code,
   required int name,
 }) {
   final codes = <String, String>{};
-  for (final line in _splitGeodata(data)) {
+  for (final line in _tokenize(data)) {
     if (line.isEmpty) continue;
     codes[line[code]] = line[name];
   }
   return codes;
 }
 
-Iterable<List<String>> _splitGeodata(String data) {
+Iterable<List<String>> _tokenize(String data) {
   return LineSplitter.split(data).map((line) => line
       .split('#') // ignore comments
       .first

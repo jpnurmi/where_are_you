@@ -1,19 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:where_are_you/geo_data.dart';
+import 'package:where_are_you/geo_location.dart';
 
 import 'test_geodata.dart';
 
 void main() {
   test('search', () async {
-    final data = Geodata(
+    final geodata = Geodata(
       loadCities: () => kCities,
       loadAdmins: () => kAdmins,
       loadCountries: () => kCountries,
     );
 
-    await data.search('').then((result) => expect(result, isEmpty));
+    await geodata.search('').then((result) => expect(result, isEmpty));
 
-    await data.search('o').then((result) {
+    await geodata.search('o').then((result) {
       expect(result.length, 1);
       expect(result.single.name, 'Oslo');
       expect(result.single.admin, 'Oslo');
@@ -21,7 +22,7 @@ void main() {
       expect(result.single.country2, 'NO');
     });
 
-    await data.search('ST').then((result) {
+    await geodata.search('ST').then((result) {
       expect(result.length, 2);
       expect(result.first.name, 'Stavanger');
       expect(result.first.admin, isNull);
@@ -33,7 +34,7 @@ void main() {
       expect(result.last.country2, 'SE');
     });
 
-    await data.search('Stock').then((result) {
+    await geodata.search('Stock').then((result) {
       expect(result.length, 1);
       expect(result.single.name, 'Stockholm');
       expect(result.single.admin, 'Stockholm');
@@ -41,9 +42,9 @@ void main() {
       expect(result.single.country2, 'SE');
     });
 
-    await data.search('stockfoo').then((result) => expect(result, isEmpty));
+    await geodata.search('stockfoo').then((result) => expect(result, isEmpty));
 
-    await data.search('uusi').then((result) {
+    await geodata.search('uusi').then((result) {
       expect(result.length, 1);
       expect(result.single.name, 'Helsinki');
       expect(result.single.admin, 'Uusimaa');
@@ -51,7 +52,7 @@ void main() {
       expect(result.single.country2, 'FI');
     });
 
-    await data.search('Hel uus FIN').then((result) {
+    await geodata.search('Hel uus FIN').then((result) {
       expect(result.length, 1);
       expect(result.single.name, 'Helsinki');
       expect(result.single.admin, 'Uusimaa');
@@ -59,20 +60,113 @@ void main() {
       expect(result.single.country2, 'FI');
     });
 
-    await data.search('Hel foo FIN').then((result) => expect(result, isEmpty));
+    await geodata
+        .search('Hel foo FIN')
+        .then((result) => expect(result, isEmpty));
   });
 
-  test('country2', () async {
-    final data = Geodata(
+  test('json', () async {
+    final geodata = Geodata(
       loadCities: () => kCities,
       loadAdmins: () => kAdmins,
       loadCountries: () => kCountries,
     );
 
-    expect(await data.country2('Denmark'), equals('DK'));
-    expect(await data.country2('Finland'), equals('FI'));
-    expect(await data.country2('Iceland'), equals('IS'));
-    expect(await data.country2('Norway'), equals('NO'));
-    expect(await data.country2('Sweden'), equals('SE'));
+    expect(
+      await geodata.fromJson(<String, dynamic>{
+        'name': 'Copenhagen',
+        'admin1': 'Capital Region',
+        'country': 'Denmark',
+        'latitude': '55.67594',
+        'longitude': '12.56553',
+        'timezone': 'Europe/Copenhagen',
+      }),
+      GeoLocation(
+        name: 'Copenhagen',
+        admin: 'Capital Region',
+        country: 'Denmark',
+        country2: 'DK',
+        latitude: 55.67594,
+        longitude: 12.56553,
+        timezone: 'Europe/Copenhagen',
+      ),
+    );
+
+    expect(
+      await geodata.fromJson(<String, dynamic>{
+        'latitude': 55.67594,
+        'longitude': 12.56553,
+      }),
+      GeoLocation(
+        latitude: 55.67594,
+        longitude: 12.56553,
+      ),
+    );
+  });
+
+  test('xml', () async {
+    final geodata = Geodata(
+      loadCities: () => kCities,
+      loadAdmins: () => kAdmins,
+      loadCountries: () => kCountries,
+    );
+
+    expect(
+      await geodata.fromXml('''
+<Response>
+  <Ip>127.0.0.1</Ip>
+  <Status>OK</Status>
+  <CountryCode>SE</CountryCode>
+  <CountryCode3>SWE</CountryCode3>
+  <CountryName>Sweden</CountryName>
+  <RegionCode>28</RegionCode>
+  <RegionName>Vastra Gotaland</RegionName>
+  <City>Göteborg</City>
+  <ZipPostalCode>416 66</ZipPostalCode>
+  <Latitude>57.70716</Latitude>
+  <Longitude>11.96679</Longitude>
+  <AreaCode>0</AreaCode>
+  <TimeZone>Europe/Stockholm</TimeZone>
+</Response>
+'''),
+      GeoLocation(
+        name: 'Göteborg',
+        admin: 'Vastra Gotaland',
+        country: 'Sweden',
+        country2: 'SE',
+        latitude: 57.70716,
+        longitude: 11.96679,
+        timezone: 'Europe/Stockholm',
+      ),
+    );
+
+    expect(
+      await geodata.fromXml('''
+<Response>
+  <Ip>127.0.0.1</Ip>
+  <Status>OK</Status>
+  <City>Göteborg</City>
+</Response>
+'''),
+      GeoLocation(
+        name: 'Göteborg',
+        admin: null,
+        country: null,
+        country2: null,
+        latitude: null,
+        longitude: null,
+        timezone: null,
+      ),
+    );
+
+    expect(
+      await geodata.fromXml('''
+<Response>
+  <Ip>127.0.0.1</Ip>
+  <Status>ERROR</Status>
+</Response>
+'''),
+      isNull,
+    );
   });
 }

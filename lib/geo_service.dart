@@ -67,13 +67,12 @@ class GeoService {
     } else {
       print('TODO: $error');
     }
-    return <GeoLocation>[];
+    return const <GeoLocation>[];
   }
 
   Future<Iterable<GeoLocation>> _onQueryResponse(Response response) async {
     final items = json.decode(response.data.toString()) as Iterable;
-    return Future.wait(items.map((json) async => GeoLocation.fromJson(json)
-        .copyWith(country2: await _geodata.country2(json['country']))));
+    return Future.wait(items.map((json) => _geodata.fromJson(json)));
   }
 
   Future<GeoLocation?> _lookupGeoIP() async {
@@ -81,6 +80,6 @@ class GeoService {
       _kGeoIPLookupUrl,
       options: Options(responseType: ResponseType.plain),
     );
-    return GeoLocation.fromXml(response.data.toString());
+    return _geodata.fromXml(response.data.toString());
   }
 }
