@@ -5,9 +5,7 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:where_are_you/geo_location.dart' as _i4;
 import 'package:where_are_you/geo_service.dart' as _i2;
-import 'package:where_are_you/geo_source.dart' as _i5;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -27,24 +25,27 @@ class MockGeoService extends _i1.Mock implements _i2.GeoService {
   }
 
   @override
-  _i3.Future<_i4.GeoLocation?> init() =>
+  _i3.Future<_i2.GeoLocation?> init() =>
       (super.noSuchMethod(Invocation.method(#init, []),
-              returnValue: Future<_i4.GeoLocation?>.value())
-          as _i3.Future<_i4.GeoLocation?>);
+              returnValue: Future<_i2.GeoLocation?>.value())
+          as _i3.Future<_i2.GeoLocation?>);
   @override
-  void addSource(_i5.GeoSource? source) =>
+  void addSource(_i2.GeoSource? source) =>
       super.noSuchMethod(Invocation.method(#addSource, [source]),
           returnValueForMissingStub: null);
   @override
-  void removeSource(_i5.GeoSource? source) =>
+  void removeSource(_i2.GeoSource? source) =>
       super.noSuchMethod(Invocation.method(#removeSource, [source]),
           returnValueForMissingStub: null);
   @override
-  _i3.Future<Iterable<_i4.GeoLocation>> search(String? name) =>
+  _i3.Future<Iterable<_i2.GeoLocation>> search(String? name) =>
       (super.noSuchMethod(Invocation.method(#search, [name]),
               returnValue:
-                  Future<Iterable<_i4.GeoLocation>>.value(<_i4.GeoLocation>[]))
-          as _i3.Future<Iterable<_i4.GeoLocation>>);
+                  Future<Iterable<_i2.GeoLocation>>.value(<_i2.GeoLocation>[]))
+          as _i3.Future<Iterable<_i2.GeoLocation>>);
+  @override
+  void cancel() => super.noSuchMethod(Invocation.method(#cancel, []),
+      returnValueForMissingStub: null);
   @override
   String toString() => super.toString();
 }

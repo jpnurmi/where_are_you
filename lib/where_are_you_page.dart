@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'geo_location.dart';
 import 'geo_service.dart';
 import 'where_are_you_model.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-import 'geo_location.dart';
 import 'geo_service.dart';
 
 class WhereAreYouModel extends ChangeNotifier {

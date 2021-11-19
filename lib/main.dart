@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:where_are_you/geo_ip.dart';
-import 'package:where_are_you/geo_name.dart';
 
-import 'geo_data.dart';
 import 'geo_service.dart';
 import 'where_are_you_page.dart';
 
@@ -22,13 +19,10 @@ Future<void> main() async {
 
   final geoip = GeoIP(url: kGeoIPUrl, geodata: geodata);
   final geoname = Geoname(url: kGeonameUrl, geodata: geodata);
-  final service = GeoService(geoip)
-    ..addSource(geodata)
-    ..addSource(geoname);
 
   runApp(
-    Provider.value(
-      value: service,
+    Provider(
+      create: (_) => GeoService(geoip, sources: [geodata, geoname]),
       builder: (ctx, _) => MaterialApp(home: WhereAreYouPage.create(ctx)),
     ),
   );

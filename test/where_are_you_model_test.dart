@@ -4,8 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:where_are_you/geo_service.dart';
 import 'package:where_are_you/where_are_you_model.dart';
 
+import 'geo_service_test.dart';
 import 'where_are_you_model_test.mocks.dart';
-import 'test_geodata.dart';
 
 @GenerateMocks([GeoService])
 void main() {
