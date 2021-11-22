@@ -44,8 +44,10 @@ class MockGeoService extends _i1.Mock implements _i2.GeoService {
                   Future<Iterable<_i2.GeoLocation>>.value(<_i2.GeoLocation>[]))
           as _i3.Future<Iterable<_i2.GeoLocation>>);
   @override
-  void cancel() => super.noSuchMethod(Invocation.method(#cancel, []),
-      returnValueForMissingStub: null);
+  _i3.Future<void> cancel() =>
+      (super.noSuchMethod(Invocation.method(#cancel, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
   @override
   String toString() => super.toString();
 }
